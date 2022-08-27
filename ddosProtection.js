@@ -23,7 +23,7 @@ setInterval(function() {
     ddos = 0;
 }, 2 * 1000);
 
-module.exports = async (request, log) => {
+module.exports = async (request, main_country, log) => {
 
     try {
         let ipAddress = request.ipInfo;
@@ -64,7 +64,7 @@ module.exports = async (request, log) => {
                 }, 120 * 1000);
                 usersMap.set('veri_' + ipAddress, 1)
             }
-            if (geo?.country !== "TR") {
+            if (geo?.country !== main_country) {
                 if (DDOS_ATTACK) return "GLOBAL_DDOS";
                 ddos = ddos + 1;
             }
