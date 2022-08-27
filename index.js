@@ -3,14 +3,16 @@ const app = express()
 const port = 80
 
 
-let supportMail = "support@cortexduo.com" // It is for the person who DDoS to send you an e-mail.
-let ddosProtection = require('./ddosProtection.js') //DDoS protection.
-let protect_urls = ["/", "/error"] // Type which URLs you want to be under DDoS protection.
+let supportMail = "support@cortexduo.com"; // It is for the person who DDoS to send you an e-mail.
+let ddosProtection = require('./ddosProtection.js'); //DDoS protection.
+let protect_urls = ["/", "/error"]; // Type which URLs you want to be under DDoS protection.
+let main_country = "TR"; //In which country is your site used? This will ease the DDoS protection a bit more so that country users are not affected.
+let main_info = "You can send an e-mail in Turkish." //What information do you want to provide when users of the country you set as "main_country" make a DDoS attack?
 
 app.use(async function(req, res, next) {
     let url = req.originalUrl;
     if (protect_urls.includes(url)) {
-        let ddos = await ddosProtection(req)
+        let ddos = await ddosProtection(req, main_country.toUpperCase())
         if (ddos == "GLOBAL_DDOS") { // If a major DDoS attack is made, access to the site is stopped in all countries except Turkey so that the site is not shut down.
             res.json({
                 WARNING: "Global DDOS Detected",
@@ -22,7 +24,7 @@ app.use(async function(req, res, next) {
             res.json({
                 WARNING: "User DDOS Detected",
                 "Support Mail": supportMail,
-                info: "Türkçe olarak mail atabilirsin."
+                info: main_info
             });
             return;
         }
