@@ -8,6 +8,7 @@ let ddosProtection = require('./ddosProtection.js'); //DDoS protection.
 let protect_urls = ["/", "/error"]; // Type which URLs you want to be under DDoS protection.
 let main_country = "TR"; //In which country is your site used? This will ease the DDoS protection a bit more so that country users are not affected.
 let main_info = "You can send an e-mail in Turkish." //What information do you want to provide when users of the country you set as "main_country" make a DDoS attack?
+let ddos_log = false; // If you set it to "true", it will show the DDoS protection log to the Console. Type "false" to turn it off.
 
 app.use(async function(req, res, next) {
     let url = req.originalUrl;
