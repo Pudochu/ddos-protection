@@ -13,7 +13,7 @@ let ddos_log = false; // If you set it to "true", it will show the DDoS protecti
 app.use(async function(req, res, next) {
     let url = req.originalUrl;
     if (protect_urls.includes(url)) {
-        let ddos = await ddosProtection(req, main_country.toUpperCase())
+        let ddos = await ddosProtection(req, main_country.toUpperCase(), ddos_log)
         if (ddos == "GLOBAL_DDOS") { // If a major DDoS attack is made, access to the site is stopped in all countries except Turkey so that the site is not shut down.
             res.json({
                 WARNING: "Global DDOS Detected",
