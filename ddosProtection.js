@@ -9,11 +9,11 @@ setInterval(function() {
     if (DDOS_ATTACK == false && ddos > 44) {
         DDOS_ATTACK = true;
         for (let i = 0; i < 20; i++) {
-            if (log) console.log('[DEFENSE SYSTEM] WARNING DDOS ATTACK DETECTED!')
+            console.log('[DEFENSE SYSTEM] WARNING DDOS ATTACK DETECTED!')
         }
         setTimeout(function() {
             for (let i = 0; i < 20; i++) {
-                if (log) console.log('[DEFENSE SYSTEM] DDOS ATTACKS NOW STOPPED!')
+                console.log('[DEFENSE SYSTEM] DDOS ATTACKS NOW STOPPED!')
             }
             DDOS_ATTACK = false;
         }, 300 * 1000); // 5 dk;
