@@ -1,4 +1,4 @@
-var geoip = require('geoip-lite'); //Module (Ram-CPU) optimized. If a major attack occurs, it will not cause any problems.
+var geoip = require('geoip-lite');
 
 const userRecently = new Set();
 const usersMap = new Map();
@@ -6,14 +6,14 @@ const usersMap = new Map();
 let ddos = 0;
 let DDOS_ATTACK = false;
 setInterval(function() {
-    if (DDOS_ATTACK == false && ddos > 44) {
+    if (DDOS_ATTACK === false && ddos > 44) {
         DDOS_ATTACK = true;
         for (let i = 0; i < 20; i++) {
-            console.log('[DEFENSE SYSTEM] WARNING DDOS ATTACK DETECTED!')
+            console.log('[DEFENSE SYSTEM] WARNING DDOS ATTACK DETECTED!');
         }
         setTimeout(function() {
             for (let i = 0; i < 20; i++) {
-                console.log('[DEFENSE SYSTEM] DDOS ATTACKS NOW STOPPED!')
+                console.log('[DEFENSE SYSTEM] DDOS ATTACKS NOW STOPPED!');
             }
             DDOS_ATTACK = false;
         }, 300 * 1000); // 5 dk;
@@ -22,6 +22,20 @@ setInterval(function() {
     ddos = 0;
 }, 2 * 1000);
 
+async function ipGet(req) {
+    var ip = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '') || req.connection.remoteAddress;
+    if (ip.includes('::ffff:')) {
+        ip = ip.split(':').reverse()[0];
+    }
+    var lookedUpIP = await geoip.lookup(ip);
+    if ((ip === '127.0.0.1' || ip === '::1')) {
+        return '1.11.111.1111'; // If the request comes from localhost, we enter a no-valid ip address.
+    }
+    if (!lookedUpIP) {
+        return '1.11.111.1111'; // If the request comes from localhost, we enter a no-valid ip address.
+    }
+    return lookedUpIP;
+}
 async function ipGet(req) {
     var ip = (req.headers['x-forwarded-for'] || '').replace(/:\d+$/, '') || req.connection.remoteAddress;
     if (ip.includes('::ffff:')) {
@@ -74,8 +88,8 @@ module.exports = async (request, main_country, log) => {
                 ddos = ddos + 1;
             }
         }
-    if (log) console.log("[DDOS-LOG] Joined site : " + geo + " | DOS-Count : " + getData + "/25 | Global-DOS: " + ddos + "/45")
-    return false;
+        if (log) console.log("[DDOS-LOG] Joined site : " + geo + " | DOS-Count : " + getData + "/25 | Global-DOS: " + ddos + "/45")
+        return false;
     } catch (e) {
         console.log(e)
     }
